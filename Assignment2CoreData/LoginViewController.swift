@@ -52,11 +52,17 @@ class LoginViewController: UIViewController {
     }
     
     @objc func handleSignIn() {
-        GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
-            guard error == nil else { return }
-            // If successful, move to the next screen
-            self.didTapSkip()
-        }
+        Task {
+                do {
+                    let result = try await AuthService.shared.signInWithGoogle(presenting: self)
+                    print("Successfully signed in user: \(result.uid)")
+                    
+                    // Navigate to the next screen on success
+                    self.didTapSkip()
+                } catch {
+                    print("Google Sign In Error: \(error.localizedDescription)")
+                }
+            }
     }
     
     @objc func didTapSkip() {

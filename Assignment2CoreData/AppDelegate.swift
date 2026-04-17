@@ -7,6 +7,10 @@
 
 import UIKit
 import CoreData
+import FirebaseAuth
+import FirebaseCore
+import GoogleSignIn
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,8 +18,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        // 1. This is the only line you really need for Firebase/Google setup here
+        FirebaseApp.configure()
+        
         return true
+    }
+    
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        // This handles the "handshake" back from the browser to your app
+        return GIDSignIn.sharedInstance.handle(url)
     }
 
     // MARK: UISceneSession Lifecycle
