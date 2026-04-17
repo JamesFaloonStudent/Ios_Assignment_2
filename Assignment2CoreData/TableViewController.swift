@@ -1,51 +1,32 @@
-//
-//  TableViewController.swift
-//  Assignment2CoreData
-//
-//  Created by James Faloon on 2026-04-17.
-//
-
-
 import UIKit
 
 class TableViewController : UITableViewController {
-    // 1. Make this a variable so it can be updated
-    var data: [Message] = []
     
-    // 2. Create the table as a property so other functions can see it
-    let tableview = UITableView()
+    // 1. Data array
+    var data: [Message] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "Messages"
         
-        // Add the "+" button to the right side of the navigation bar
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
-                                                                target: self,
-                                                                action: #selector(didTapAdd))
+        // 2. Add the "+" button
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                            target: self,
+                                                            action: #selector(didTapAdd))
         
+        // 3. Register cell on the built-in 'tableView'
+        // In UITableViewController, you don't need to set delegates or add as subview
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        // Setup Table Frame & Constraints
-        tableview.frame = self.view.bounds
-        tableview.delegate = self
-        tableview.dataSource = self
-        
-        // Register a cell class
-        tableview.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        
-        self.view.addSubview(tableview)
-        
-        // 3. Fetch the data and refresh the table
         loadData()
     }
     
     func loadData() {
-        // Fetch from service and refresh UI
-//        CoreDataService.shared.createTestData();
+        // Fetch from service and refresh the built-in tableView
         self.data = CoreDataService.shared.fetchData() ?? []
-        self.tableview.reloadData()
+        self.tableView.reloadData()
     }
-    
     
     @objc func didTapAdd() {
         let alert = UIAlertController(title: "New Message",
@@ -60,74 +41,47 @@ class TableViewController : UITableViewController {
         
         alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self] _ in
             if let text = alert.textFields?.first?.text, !text.isEmpty {
-                // 1. Save to Core Data
                 CoreDataService.shared.createMessage(text: text)
-                
-                // 2. Refresh the UI
                 self?.loadData()
             }
         }))
         
         present(alert, animated: true)
     }
-}
 
+    // MARK: - Table view data source
+    // NOTE: You don't need to put these in an extension if you don't want to,
+    // UITableViewController already conforms to these protocols.
 
-extension TableViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Use dequeue for better performance
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        // Get the specific message object for this row
         let messageObject = data[indexPath.row]
-        
-        // Set the text from the message attribute
         cell.textLabel?.text = messageObject.message
-        
         return cell
     }
     
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // 1. Get the message to delete
             let messageToDelete = data[indexPath.row]
             
-            // 2. Delete from Core Data via your service
-            // Since your deleteMessage uses UUID, we pass the id
             if let id = messageToDelete.id {
                 CoreDataService.shared.deleteMessage(id: id)
             }
             
-            // 3. Update the local array and the UI
             data.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
     
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 1. Deselect the row so it doesn't stay gray
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        // 2. Get the specific message that was clicked
         let messageToPass = data[indexPath.row]
-        
-        // 3. Initialize the second View Controller
         let detailVC = DetailViewController()
-        
-        // 4. Pass the data!
         detailVC.selectedMessage = messageToPass
-        
-        // 5. Push it onto the navigation controller
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
 }
-
-

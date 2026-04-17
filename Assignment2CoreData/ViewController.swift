@@ -53,7 +53,7 @@ class ViewController: UIViewController {
         }
         
         @objc func didTapSkip() {
-            let mainVC = ViewController()
+            let mainVC = TableViewController()
             let nav = UINavigationController(rootViewController: mainVC)
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: true)
