@@ -22,7 +22,22 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1057.2519083969464" y="-34.507042253521128"/>
+            <point key="canvasLocation" x="1018" y="-35"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="san-Dx-9MX">
+            <objects>
+                <viewController id="DC9-GG-J51" customClass="TableViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="plr-xj-8EZ">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="nZb-8d-XTS"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="U5i-XJ-fiy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1844" y="-35"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="1WG-m0-xLW">
@@ -37,7 +52,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9ou-y9-abE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2034" y="-35"/>
+            <point key="canvasLocation" x="2601" y="-35"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="QFK-eF-gLI">
